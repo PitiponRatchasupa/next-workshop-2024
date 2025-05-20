@@ -1,6 +1,55 @@
 "use client";
 
+import axios from "axios";
+import { useState } from "react";
+import Swal from "sweetalert2";
+import config from "../config";
+import { useRouter } from "next/navigation";
+
 export default function Page() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+  const signin = async () => {
+    try {
+      if (username != "" && password != "") {
+        const payload = {
+          username: username,
+          password: password,
+        };
+        const res = await axios.post(
+          config.apiServer + "/api/user/signIn",
+          payload
+        );
+
+        if (res.data.token !== undefined) {
+          localStorage.setItem(config.token, res.data.token);
+          localStorage.setItem("next_name", res.data.name);
+          localStorage.setItem("next_user_id", res.data.id);
+
+          router.push("/backoffice");
+        } else {
+          Swal.fire({
+            title: "ตรวจ username",
+            text: "username ไม่ถูกต้อง",
+            icon: "error",
+          });
+        }
+      } else {
+        Swal.fire({
+          title: "แจ้งเตือน",
+          text: "กรุณากรอก username และ password",
+          icon: "error",
+        });
+      }
+    } catch (ex: any) {
+      Swal.fire({
+        title: "error",
+        text: ex.message,
+        icon: "error",
+      });
+    }
+  };
   return (
     <>
       <div className="login-box">
@@ -14,12 +63,13 @@ export default function Page() {
           <div className="card-body login-card-body">
             <p className="login-box-msg">Sign in to start your session</p>
 
-            <form action="../../index3.html" method="post">
+            <div>
               <div className="input-group mb-3">
                 <input
-                  type="email"
+                  onChange={(e) => setUsername(e.target.value)}
                   className="form-control"
-                  placeholder="Email"
+                  placeholder="Username"
+                  required={true}
                 />
                 <div className="input-group-append">
                   <div className="input-group-text">
@@ -29,9 +79,11 @@ export default function Page() {
               </div>
               <div className="input-group mb-3">
                 <input
+                  onChange={(e) => setPassword(e.target.value)}
                   type="password"
                   className="form-control"
                   placeholder="Password"
+                  required={true}
                 />
                 <div className="input-group-append">
                   <div className="input-group-text">
@@ -48,12 +100,16 @@ export default function Page() {
                 </div>
 
                 <div className="col-4">
-                  <button type="submit" className="btn btn-primary btn-block">
+                  <button
+                    onClick={signin}
+                    type="submit"
+                    className="btn btn-primary btn-block"
+                  >
                     Sign In
                   </button>
                 </div>
               </div>
-            </form>
+            </div>
 
             <div className="social-auth-links text-center mb-3">
               <p>- OR -</p>

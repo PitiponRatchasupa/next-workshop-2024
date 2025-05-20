@@ -15,51 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>AdminLTE 3 | Dashboard</title>
+        <title>NextPos</title>
 
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
-        />
-
-        <link
-          rel="stylesheet"
-          href="plugins/fontawesome-free/css/all.min.css"
-        />
-
-        <link
-          rel="stylesheet"
-          href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"
-        />
-
-        <link
-          rel="stylesheet"
-          href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"
-        />
-
-        <link
-          rel="stylesheet"
-          href="plugins/icheck-bootstrap/icheck-bootstrap.min.css"
-        />
-
-        <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css" />
-
-        <link rel="stylesheet" href="dist/css/adminlte.min.css" />
-
-        <link
-          rel="stylesheet"
-          href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css"
-        />
-
-        <link
-          rel="stylesheet"
-          href="plugins/daterangepicker/daterangepicker.css"
-        />
-
-        <link
-          rel="stylesheet"
-          href="plugins/summernote/summernote-bs4.min.css"
-        />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossOrigin="anonymous" />
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossOrigin="anonymous"></script>
       </head>
       <body className="hold-transition sidebar-mini layout-fixed">
         {children}
