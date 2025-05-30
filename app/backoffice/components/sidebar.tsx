@@ -114,6 +114,12 @@ export default function Sidebar() {
                   <p>ประเภทอาหาร</p>
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link href="/backoffice/food-size" className="nav-link">
+                  <i className="nav-icon fas fa-liat"></i>
+                  <p>ขนาดอาหาร</p>
+                </Link>
+              </li>
               {/* {userLevel === "admin" && (
                 <li className="nav-item">
                   <Link href="/backoffice/dashboard" className="nav-link">

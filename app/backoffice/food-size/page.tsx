@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import FoodTypeModal from "./components/FoodTypeModal";
+import FoodSizeModal from "./components/FoodSizeModal";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/ModeEditOutline";
 import {
@@ -43,9 +43,12 @@ export default function FoodType() {
     isOpen: false,
     name: "",
     remark: "",
+    foodType: null,
+    moneyAdded: null,
   };
 
   const [foodTypes, setFoodTypes] = useState([]);
+  const [foodSizes, setFoodSizes] = useState([]);
   const [showConfirmDialog, setShowConfirmDialog] =
     useState(initialConfirmDialog);
   const [showModal, setShowModal] = useState(initialEdit);
@@ -74,15 +77,17 @@ export default function FoodType() {
     },
   }));
 
-  const onSaveFoodType = async (name: string, remark: string) => {
+  const onSaveFoodSize = async (name: string, remark: string, foodTypeId: Number, moneyAdded: number) => {
     try {
       const payload = {
         name: name,
         remark: remark,
+        foodTypeId: foodTypeId,
+        moneyAdded: moneyAdded
       };
 
       const respone = await axios.post(
-        config.apiServer + "/api/foodType/create",
+        config.apiServer + "/api/foodSize/create",
         payload
       );
       if (respone?.status == 200) {
@@ -104,15 +109,17 @@ export default function FoodType() {
     }
   };
 
-  const onEditFoodType = async (id: number ,name: string, remark: string) => {
+  const onEditFoodSize = async (id: number ,name: string, remark: string, foodTypeId: Number, moneyAdded: number) => {
     try {
       const payload = {
         name: name,
         remark: remark,
+        foodTypeId: foodTypeId,
+        moneyAdded: moneyAdded
       };
 
       const respone = await axios.put(
-        config.apiServer + "/api/foodType/update/" + id,
+        config.apiServer + "/api/foodSize/update/" + id,
         payload
       );
       if (respone?.status == 200) {
@@ -134,11 +141,11 @@ export default function FoodType() {
     }
   };
 
-  const onRemoveFoodType = async (id: any) => {
+  const onRemoveFoodSize = async (id: any) => {
     try {
 
       const respone = await axios.delete(
-        config.apiServer + "/api/foodType/remove/" + id
+        config.apiServer + "/api/foodSize/remove/" + id
       );
       if (respone?.status == 200) {
         <Alert variant="filled" severity="success">
@@ -162,6 +169,9 @@ export default function FoodType() {
   const fetchData = async () => {
     const res = await axios.post(config.apiServer + "/api/foodType/list");
     setFoodTypes(res.data.dataList);
+
+    const foodSizes = await axios.post(config.apiServer + "/api/foodSize/list");
+    setFoodSizes(foodSizes.data.dataList);
   };
   return (
     <>
@@ -170,7 +180,7 @@ export default function FoodType() {
           <Card>
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
-                ประเภทอาหารและเครื่องดื่ม
+                ขนาดอาหาร
               </Typography>
             </CardContent>
           </Card>
@@ -199,11 +209,13 @@ export default function FoodType() {
                       <TableRow>
                         <StyledTableCell>name</StyledTableCell>
                         <StyledTableCell align="right">remark</StyledTableCell>
+                        <StyledTableCell>foodTypeName</StyledTableCell>
+                        <StyledTableCell>moneyAdded</StyledTableCell>
                         <StyledTableCell align="right">action</StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {foodTypes?.map((row: any) => (
+                      {foodSizes?.map((row: any) => (
                         <StyledTableRow
                           key={row.id}
                           sx={{
@@ -216,6 +228,12 @@ export default function FoodType() {
                           <TableCell component="th" scope="row">
                             {row.remark}
                           </TableCell>
+                          <TableCell component="th" scope="row">
+                            {row.FoodType?.name}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {row.moneyAdded}
+                          </TableCell>
                           <TableCell component="th" scope="row" align="right">
                             <Button
                               variant="outlined"
@@ -226,6 +244,8 @@ export default function FoodType() {
                                   id: row.id,
                                   name: row.name,
                                   remark: row.remark,
+                                  moneyAdded: row.moneyAdded,
+                                  foodType: row.FoodType,
                                   isEdit: true,
                                   isOpen: true,
                                 });
@@ -265,15 +285,16 @@ export default function FoodType() {
         </Grid>
       </Grid>
       {showModal.isOpen && (
-        <FoodTypeModal
+        <FoodSizeModal
           title={"เพิ่มประเภทอาหาร"}
           onClose={() => setShowModal(initialEdit)}
+          foodTypes={foodTypes}
           isOpen={showModal.isOpen}
-          onSave={(name, remark) => onSaveFoodType(name, remark)}
+          onSave={(name, remark, foodTypeId, moneyAdded) => onSaveFoodSize(name, remark, foodTypeId, moneyAdded)}
           initialData={showModal}
           isEdit={showModal.isEdit}
-          onEdit={(id, name, remark) => onEditFoodType(id, name, remark)}
-        ></FoodTypeModal>
+          onEdit={(id, name, remarkม , foodTypeId, moneyAdded) => onEditFoodSize(id, name, remarkม , foodTypeId, moneyAdded)}
+        ></FoodSizeModal>
       )}
       <ConfirmDialog
         title={showConfirmDialog.title}
@@ -286,7 +307,7 @@ export default function FoodType() {
             isOpen: false,
           });
         }}
-        onConfirm={() => onRemoveFoodType(showConfirmDialog.id)}
+        onConfirm={() => onRemoveFoodSize(showConfirmDialog.id)}
       ></ConfirmDialog>
     </>
   );
